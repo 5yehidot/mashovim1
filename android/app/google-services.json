@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "736165814610",
+    "project_id": "sendfeedback-70810",
+    "storage_bucket": "sendfeedback-70810.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:736165814610:android:a83347652a4c7755f19a8b",
+        "android_client_info": {
+          "package_name": "com.bzvi.feedback_flutter_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "736165814610-qo150ebfkhln07l4ujrhj9lbq220vl93.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bzvi.feedback_flutter_app",
+            "certificate_hash": "08b5425fc2a16b5a9b730ed874e1400656d57bdc"
+          }
+        },
+        {
+          "client_id": "736165814610-3qj9qn8k2ssmhq9q8kbbe4108ucmts0j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKoKXrN5tHP3qfNd_2BvGu4ctbO5_sMM4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "736165814610-3qj9qn8k2ssmhq9q8kbbe4108ucmts0j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
