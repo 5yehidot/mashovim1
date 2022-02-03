@@ -4,11 +4,8 @@ import 'ten_feedback_database_helper.dart';
 import 'package:flutter_sms/flutter_sms.dart';// method to send sms. Opens up the SMS app only, recipients is a required field. It works in emulator, you need to have a list of phone#s before using this method.
 //import 'package:share/share.dart';// method to share through Whatsapp, SMS or mail.
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:provider/provider.dart';
-import 'auth_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'userModel.dart';
 
 
 class SendFeedbackPage extends StatefulWidget {
@@ -50,6 +47,7 @@ class _SendFeedbackPageState extends State<SendFeedbackPage> {
 
   // Create a CollectionReference to the firestore collection named: sent_messages
   CollectionReference collectionReference = FirebaseFirestore.instance.collection("sent_messages");
+  // Get firebase user
   User firebaseUser = FirebaseAuth.instance.currentUser;
 
   void _sendSMS(String message, List<String> recipents) async {
@@ -69,47 +67,24 @@ class _SendFeedbackPageState extends State<SendFeedbackPage> {
     });
     print(_result);
   }
-/*  void _fetchGroupClass() async {
-    if (firebaseUser != null) {
-      fbName = firebaseUser.displayName;
-      fbUserID = firebaseUser.uid;
 
-      DocumentSnapshot ds = await FirebaseFirestore.instance.collection(fbUserID).doc('xjm1alt32SIj5tTit5zx').get();
-      classCode=ds['classCode'];
-      groupClass=ds['groupClass'];
-
-      setState(() {
-        print(classCode);
-        print(groupClass);
-        _groupController.text = groupClass;
-
-      });
-
-    }
-  }*/
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
-    final authBloc = Provider.of<AuthBloc>(context);
-    DateTime now = DateTime.now();
-    // Get the firebase user
+//    final authBloc = Provider.of<AuthBloc>(context);
+//    DateTime now = DateTime.now();
 //    User firebaseUser = FirebaseAuth.instance.currentUser;
     print('Authentication sendfeedback firebaseUser: '+ ' - ' + '${firebaseUser.displayName}');
 
     void updateGroupName() async {
       groupN = await _fetchGroup(firebaseUser.uid);
         print('GROUPN is:' + groupN);
-//      print('User Model groupId is: ' + '${UserModel().userId}');
-//        print('User Model groupName is: ' + '${UserModel().groupName}');
     };
     setState(() {
       updateGroupName();
-//      print('Update group name is:' + groupN);
-
     });
-
 
     return Scaffold(
       body: Column(
@@ -140,7 +115,8 @@ class _SendFeedbackPageState extends State<SendFeedbackPage> {
                               labelStyle: TextStyle(
                                 color: Colors.yellow, fontSize: 8, fontWeight: FontWeight.bold, ),
                             ),
-                            controller: _groupController,
+                            controller: _groupController, //_groupController.text = groupN;
+
                           ),
                         ),
                         Padding(
@@ -250,8 +226,6 @@ class _SendFeedbackPageState extends State<SendFeedbackPage> {
                                             padding: const EdgeInsets.all(8.0),
                                             child: Column(
                                               children: [
-//                                                SizedBox(height: 0.5,),
-
                                                 Container(
                                                   decoration: BoxDecoration(
                                                       color: Colors.purpleAccent,
@@ -282,83 +256,6 @@ class _SendFeedbackPageState extends State<SendFeedbackPage> {
                                 ),
                               ),
                             ),
-
-                            /*
-                            FutureBuilder(
-                              future: dbHelper.getStudentList(),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState == ConnectionState.done && snapshot.data != null) {
-                                  studentlist = snapshot.data;
-                                  return ListView.builder(
-                                    scrollDirection: Axis.vertical,
-                                    shrinkWrap: true,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    itemCount: studentlist == null ? 0 : studentlist.length,
-                                    itemBuilder: (BuildContext context, int index) {
-                                      Student st = studentlist[index];
-                                      return Card(
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: <Widget>[
-                                            Container(
-                                              margin: const EdgeInsets.all(2.0),
-                                              color: Colors.purple[50],
-                                              width: width * 0.45,
-                                              height: 30.0,
-                                              child: TextButton(
-                                                onPressed: () {// make a student card clickable
-                                                            // Update input fields with current name and phone if user clicks on a student card
-                                                  _nameController.text = st.name;
-                                                  _groupController.text = st.groupClass;
-                                                  _phoneController.text = st.phone;
-                                                  print('Single-select Phone: ' + _phoneController.text);
-                                                  student = st; // Notify submitstudent that student is not null
-                                                  updateNameIndex = index; // Notify list builder which card needs update
-                                                }, // onPressed
-                                                onLongPress: () {// make a student card clickable
-                                                  // Update input fields with current name and phone if user clicks on a student card
-                                                  _nameController.text = _nameController.text + ',' + st.name;
-                                                  _phoneController.text = _phoneController.text + ',' + st.phone;
-                                                  print('Multi-select name: ' + _nameController.text);
-                                                  print('Multi-select Phone: ' + _phoneController.text);
-                                                  student = st; // Notify submitstudent that student is not null
-                                                  updateNameIndex = index; // Notify list builder which card needs update
-                                                }, // onPressed
-                                                child: Column(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  children: <Widget>[
-                                                    Text(
-                                                      '${st.name}',
-                                                      style: TextStyle(
-                                                        fontSize: 10,
-                                                        color: Colors.blue,
-                                                        fontWeight: FontWeight.bold
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    }, // itemBuilder
-                                    reverse: true,
-                                  );
-                                } // if
-                                else {
-                                  if (snapshot.hasError) {
-                                    print('Error: ${snapshot.error}');
-                                  } else {
-                                      return CircularProgressIndicator();
-                                    } // else
-                                  }
-                                return CircularProgressIndicator();
-                              }, // builder
-                            ),
-*/
                           ],
                         ),
                       ),
@@ -394,7 +291,7 @@ class _SendFeedbackPageState extends State<SendFeedbackPage> {
                                                width: width * 0.455,
                                                height: 120.0,
                                                child: TextButton(
-                                                 onPressed: () {// make a student card clickable
+                                                 onPressed: () {// make a card clickable
                                                                 // Update input fields with current statement and category if user clicks on a feedback card
                                                    _statementController.text = fb.statement;
                                                    _categoryNameController.text = fb.category;
@@ -454,61 +351,6 @@ class _SendFeedbackPageState extends State<SendFeedbackPage> {
               ),
             ),
 
-/*
-            Container(
-              color: Colors.white70,
-              height: MediaQuery.of(context).size.height * 0.1,
-              width: MediaQuery.of(context).size.width,
-              child: Column(
-                children: [
-
-                  Flexible(
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 30.0,
-                      alignment: Alignment.center,
-
-                      child: StreamBuilder<User>(
-                        stream: authBloc.currentUser,
-                        builder: (context, snapshot) {
-                          if (firebaseUser.displayName != null)
-                            return Column(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(' זמן שליחת ההודעה האחרונה '+firebaseUser.displayName+' '+'${now.hour}'+':'+'${now.minute}'+':'+'${now.second}', style: TextStyle(fontSize: 10.0)),
-                                //Text(snapshot.data.displayName, style: TextStyle(fontSize: 15.0)),
-                              ],
-                            );
-                          else return CircularProgressIndicator();
-                                                  },
-                      ),
-                    ),
-                  ),
-
-
-                  Flexible(
-                    child: StreamBuilder<QuerySnapshot>(
-                      stream: FirebaseFirestore.instance.collection('sent_messages').where('time', isGreaterThan: now.subtract(const Duration(minutes: 5))).orderBy('time', descending: true).snapshots(),
-                      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                        if (!snapshot.hasData) {
-                          return Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-                        return ListView(
-                          padding: const EdgeInsets.only(right: 20.0),
-                          children: snapshot.data.docs.map((document) {
-                            return ListTile(title: Text(document['message'], style: TextStyle(fontSize: 10.0, color: Colors.purple, fontWeight: FontWeight.bold), textAlign: TextAlign.right,));
-                          }).toList(),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-*/
         ],
       ),
         floatingActionButton: FloatingActionButton.extended(
@@ -518,17 +360,7 @@ class _SendFeedbackPageState extends State<SendFeedbackPage> {
               fbName = firebaseUser.displayName;
               fbUserID = firebaseUser.uid;
 
-/*
-              DocumentSnapshot ds = await FirebaseFirestore.instance.collection(fbUserID).doc('s3Rr8nfBIQU9n2xCAm3zeENCkFq1').get();
-                classCode=ds['classCode'];
-*/
-
                 setState(() {
-/*
-                  print(classCode);
-                  print(groupClass);
-*/
-
                 });
 
             }
@@ -538,13 +370,11 @@ class _SendFeedbackPageState extends State<SendFeedbackPage> {
               for (int j = 0; j < nameList.length; j++) {
                 print('hello ${nameList[j]}');
                 String sendMessage = ' הידד ${nameList[j]}, ${_statementController.text}';
-//                await collectionReference.add({'sourceID': fbUserID, 'sourceName': fbName, 'name': nameList[j], 'groupClass': _groupController.text, 'message': sendMessage, 'category': _categoryNameController.text, 'time': DateTime.now(), 'phone': phoneList[j], 'classCode': classCode}).then((value) => print('Message added'));
                 await collectionReference.add({'sourceID': fbUserID, 'sourceName': fbName, 'name': nameList[j], 'groupClass': _groupController.text, 'message': sendMessage, 'category': _categoryNameController.text, 'time': DateTime.now(), 'phone': phoneList[j]}).then((value) => print('Message added'));
                 _sendSMS(sendMessage, [phoneList[j]]);
               }
             } else {
               String sendMessage = ' הידד ${_nameController.text}, ${_statementController.text}';
-//              await collectionReference.add({'sourceID': fbUserID, 'sourceName': fbName, 'name': _nameController.text, 'groupClass': _groupController.text, 'message': sendMessage, 'category': _categoryNameController.text, 'time': DateTime.now(), 'phone': _phoneController.text, 'classCode': classCode}).then((value) => print('Message added'));
               await collectionReference.add({'sourceID': fbUserID, 'sourceName': fbName, 'name': _nameController.text, 'groupClass': _groupController.text, 'message': sendMessage, 'category': _categoryNameController.text, 'time': DateTime.now(), 'phone': _phoneController.text}).then((value) => print('Message added'));
               _sendSMS(sendMessage, [_phoneController.text]);
 

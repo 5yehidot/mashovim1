@@ -1,6 +1,5 @@
 import 'package:feedback_flutter_app/homepage.dart';
 import 'package:flutter/material.dart';
-import 'userModel.dart';
 import 'dbFuture.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 class CreateGroup extends StatefulWidget {
@@ -16,8 +15,6 @@ class _CreateGroupState extends State<CreateGroup> {
   User firebaseUser = FirebaseAuth.instance.currentUser;
 
   void _goToAddGroup(BuildContext context, String groupName) async {
-//    UserModel _currentUser = widget.userModel;
-//    UserModel _currentUser = widget.userModel;
     print('${firebaseUser.displayName}');
     print(groupName);
     String _returnString = await DBFuture().createGroup(groupName, firebaseUser.uid, firebaseUser.displayName);
@@ -84,23 +81,6 @@ class _CreateGroupState extends State<CreateGroup> {
                   SizedBox(
                     height: 20.0,
                   ),
-/*
-                  TextButton(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 80),
-                      child: Text(
-                        "הוספת קבוצה",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20.0,
-                        ),
-                      ),
-                    ),
-                    onPressed: () =>
-                        _goToAddGroup(context, _groupNameController.text),
-                  ),
-*/
                 ],
               ),
             ),

@@ -2,7 +2,6 @@ import 'package:feedback_flutter_app/reports.dart';
 import 'package:flutter/material.dart';
 import 'feedbacklist.dart';
 import 'reports.dart';
-import 'student_page.dart';
 import 'sendfeedback_page.dart';
 import 'ten_feedback_database_helper.dart';
 import 'login_page.dart';
@@ -11,8 +10,6 @@ import 'auth_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
 import 'import_messages.dart';
-import 'import_names.dart';
-import 'join_class_page.dart';
 import 'joinGroup.dart';
 import 'createGroup.dart';
 import 'switchGroup.dart';
@@ -136,23 +133,7 @@ void signUp() async {
               ),
             ),
             Divider(),
-/*
-            TextButton(
-              onPressed: () {
-                print('תלמידים');
-                //return MyStudentPage();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => MyStudentPage()),
-                );
-              },
-              child: ListTile(
-                leading: Icon(Icons.person_add),
-                title: Text('תלמידים'),
-              ),
-            ),
-            Divider(),
-*/
+
             TextButton(
               onPressed: () {
                 //print('דוחות');
@@ -168,21 +149,6 @@ void signUp() async {
               ),
             ),
             Divider(),
-/*
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => CreateUser()),
-                );
-              },
-              child: ListTile(
-                leading: Icon(Icons.note_add),
-                title: Text('רישום'),
-              ),
-            ),
-            Divider(),
-*/
             TextButton(
               onPressed: () {
                 Navigator.push(
@@ -227,24 +193,7 @@ void signUp() async {
               ),
             ),
             Divider(),
-/*
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ImportNamesListPage()),
-                );
-              },
-              child: ListTile(
-                leading: Icon(Icons.import_export),
-                title: Text('יבוא שמות תלמידים בהתקנה',style: TextStyle(
-                  fontSize: 7,
-                  color: Colors.red,
-                ),),
-              ),
-            ),
-            Divider(),
-*/
+
             TextButton(
               onPressed: () {
                 print('יציאה');

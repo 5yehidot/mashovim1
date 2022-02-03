@@ -1,5 +1,3 @@
-//import 'dart:html';
-
 import 'package:flutter/cupertino.dart';
 import 'package:feedback_flutter_app/homepage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,9 +15,7 @@ class SwitchGroup extends StatefulWidget {
 }
 
 class _SwitchGroupState extends State<SwitchGroup> {
-//  GroupsObject groups;
-//  List<GroupsObject> GroupsList;
-  // Get the firebase user
+// Get the firebase user
   User firebaseUser = FirebaseAuth.instance.currentUser;
 
   void _switchGroup(BuildContext context, String groupId) async {
@@ -51,7 +47,7 @@ class _SwitchGroupState extends State<SwitchGroup> {
 
   @override
   Widget build(BuildContext context) {
-    int myGroupsLength;
+//    int myGroupsLength;
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(

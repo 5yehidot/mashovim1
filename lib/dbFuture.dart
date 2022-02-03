@@ -106,18 +106,45 @@ class DBFuture {
   }
 
 /*
-  Future<String> leaveGroup(String groupId, UserModel userModel) async {
+  Future<String> leaveGroup(String groupId, String userId, String userName) async {
     String retVal = "error";
     List<String> members = [];
+    List<String> memberPhones = [];
+    List<String> myGroups = [];
+    List<String> myGroupIds = [];
+
     try {
-      members.add(userModel.sourceId);
+      DocumentSnapshot  groupName = await _firestore.collection("fbGroups").doc(groupId).get();
+      String joinGroupName = groupName['groupName'];
+      print(joinGroupName);
+      members.add(userName);
+      myGroups.add(joinGroupName);
+      print(myGroups);
+      myGroupIds.add(groupId);
+      print(myGroupIds);
+//      print('Members' + '${members}');
+      DocumentSnapshot  userPhone = await _firestore.collection("fbUsers").doc(userId).get();
+      String addPhone = userPhone['phone'];
+      memberPhones.add(addPhone);
+
       await _firestore.collection("fbGroups").doc(groupId).update({
-        'groupMembers': FieldValue.arrayRemove(members),
+        'groupMembers': FieldValue.arrayUnion(members),
+        'groupMemberPhones': FieldValue.arrayUnion(memberPhones),
       });
 
-      await _firestore.collection("fbUsers").doc(userModel.sourceId).update({
-        'groupId': null,
+      await _firestore.collection("fbUsers").doc(userId).update({
+      'myGroups': FieldValue.arrayUnion(myGroups),
+      'myGroupIds': FieldValue.arrayUnion(myGroupIds),
+      'groupName': joinGroupName,
+      'groupId': groupId.trim(),
+
       });
+
+      retVal = "success";
+    } on PlatformException catch (e) {
+      print('יש להשתמש בקוד קבוצה נכון!');
+      retVal = "יש להשתמש בקוד קבוצה נכון!";
+      print(e);
     } catch (e) {
       print(e);
     }
@@ -141,56 +168,6 @@ class DBFuture {
     } catch (e) {
       print(e);
     }
-/*
-// userModel from snapshot
+    return retVal;// added 3Feb22_2216
 
-    UserModel _userModelFromSnapshot(DocumentSnapshot snapshot) {
-      return UserModel(
-        userId: userId,
-        name: snapshot.data()['name'],
-        phone: snapshot.data()['phone'],
-        accountCreated: snapshot.data()['accountCreated'],
-        groupId: snapshot.data()['groupId'],
-        groupName: snapshot.data()['groupName'],
-        myGroups: snapshot.data()['myGroups'],
-        myGroupIds: snapshot.data()['myGroupIds'],
-
-      );
-    }
-    return retVal;
-  }
-
-
-  Future<UserModel> getUser(String uid) async {
-    UserModel retVal;
-
-    try {
-      DocumentSnapshot _docSnapshot =
-      await _firestore.collection("fbUsers").doc(uid).get();
-      retVal = UserModel.fromDocumentSnapshot(doc: _docSnapshot);
-    } catch (e) {
-      print(e);
-    }
-
-    return retVal;
-  }
-  Future<GroupModel> getGroup(String groupId) async {
-    GroupModel retVal;
-
-    try {
-      DocumentSnapshot _docSnapshot =
-      await _firestore.collection("fbGroups").doc(groupId).get();
-      retVal = GroupModel.fromDocumentSnapshot(doc: _docSnapshot);
-    } catch (e) {
-      print(e);
-    }
-
-
-    return retVal;
-  }
-// Get user data into UserModul via fbUsers userId doc stream
-  Stream<DocumentSnapshot> get UserModel {
-    return userReference.doc(uId).snapshots();
-  }
-*/
 }}

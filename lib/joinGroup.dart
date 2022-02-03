@@ -1,33 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:feedback_flutter_app/homepage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
-import 'userModel.dart';
 import 'dbFuture.dart';
 import 'package:flutter/material.dart';
 
 class JoinGroup extends StatefulWidget {
-//  final UserModel userModel;
-
-//  JoinGroup({this.userModel});
   @override
   _JoinGroupState createState() => _JoinGroupState();
 }
 
 class _JoinGroupState extends State<JoinGroup> {
-  // Get the firebase user
+// Get the firebase user
   User firebaseUser = FirebaseAuth.instance.currentUser;
 
   void _joinGroup(BuildContext context, String groupId) async {
-//    UserModel _currentUser = widget.userModel;
     print('${firebaseUser.displayName}');
     print(groupId);
     String _returnString1 = await DBFuture().joinGroup(groupId, firebaseUser.uid, firebaseUser.displayName);
     print(_returnString1);
 
-//    String _returnString = await DBFuture().createGroup(groupName, firebaseUser.uid, firebaseUser.displayName);
-//    String _returnString2 = await DBFuture().joinGroup(groupId, firebaseUser.uid);
-//    if ((_returnString1 == "success") & (_returnString2 == "success")) {
     if ((_returnString1 == "success") ) {
       Navigator.pushAndRemoveUntil(
           context,
@@ -77,25 +68,6 @@ class _JoinGroupState extends State<JoinGroup> {
                   SizedBox(
                     height: 20.0,
                   ),
-
-/*
-                  TextButton(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 100),
-                      child: Text(
-                        "הצטרפות",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20.0,
-                        ),
-                      ),
-                    ),
-                    onPressed: () {
-                      _joinGroup(context, _groupIdController.text);
-                    },
-                  ),
-*/
                 ],
               ),
             ),

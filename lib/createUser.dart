@@ -1,25 +1,18 @@
 import 'package:feedback_flutter_app/homepage.dart';
 import 'package:flutter/material.dart';
-import 'userModel.dart';
 import 'dbFuture.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 class CreateUser extends StatefulWidget {
-//  final UserModel userModel;
-//  CreateGroup({this.userModel});
-
   @override
   _CreateUserState createState() => _CreateUserState();
 }
 
 class _CreateUserState extends State<CreateUser> {
-  // Get the firebase user
+  // Get a firebase user
   User firebaseUser = FirebaseAuth.instance.currentUser;
   TextEditingController _userPhoneController = TextEditingController();
-//  _userNameController = firebaseUser.displayName;
 
   void _goToAddUser(BuildContext context, String userPhone) async {
-//    UserModel _currentUser = widget.userModel;
-//    UserModel _currentUser = widget.userModel;
     print('${firebaseUser.displayName}');
     print(userPhone);
     String _returnString = await DBFuture().createUser(firebaseUser.uid, firebaseUser.displayName, userPhone);
@@ -96,8 +89,6 @@ class _CreateUserState extends State<CreateUser> {
         onPressed: () async {
           FocusScope.of(context).requestFocus(new FocusNode()); // make soft keyboard disappeared
           _goToAddUser(context, _userPhoneController.text);
-//          _goToAddUser(context, firebaseUser.displayName);
-
         },
         label: const Text('יצירה'),
         icon: const Icon(Icons.send),
